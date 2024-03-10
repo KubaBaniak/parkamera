@@ -15,11 +15,19 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(CarLog::Id)
                             .big_integer()
                             .not_null()
-                            .primary_key()
-                            .auto_increment(),
+                            .auto_increment()
+                            .primary_key(),
                     )
-                    .col(ColumnDef::new(CarLog::CarArrived).date_time().not_null())
-                    .col(ColumnDef::new(CarLog::CarLeft).date_time().null())
+                    .col(
+                        ColumnDef::new(CarLog::CarArrived)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(CarLog::CarLeft)
+                            .timestamp_with_time_zone()
+                            .null(),
+                    )
                     .to_owned(),
             )
             .await

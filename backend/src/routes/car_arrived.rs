@@ -1,33 +1,35 @@
-use axum::{http::header::HeaderMap, Json};
-use chrono::{DateTime, Utc};
+use crate::entities::car_log;
+use axum::{http::StatusCode, Extension, Json};
+use sea_orm::{prelude::DateTimeWithTimeZone, ActiveModelTrait, DatabaseConnection, Set};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct CarArrived {
-    time_arrived: DateTime<Utc>,
+#[derive(Deserialize)]
+pub struct RequestCar {
+    car_arrived: DateTimeWithTimeZone,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct CarArrivedResponse {
-    time_arrived: DateTime<Utc>,
-    time_left: Option<DateTime<Utc>>,
+#[derive(Serialize)]
+pub struct ResponseCar {
+    id: i64,
+    car_arrived: DateTimeWithTimeZone,
+    car_left: Option<DateTimeWithTimeZone>,
 }
 
 pub async fn car_arrived(
-    headers: HeaderMap,
-    Json(body): Json<CarArrived>,
-) -> Json<CarArrivedResponse> {
-    for (name, value) in headers.iter() {
-        println!("{:?}: {:?}", name, value);
+    Extension(database): Extension<DatabaseConnection>,
+    Json(body): Json<RequestCar>,
+) -> Result<Json<ResponseCar>, StatusCode> {
+    let new_car = car_log::ActiveModel {
+        car_arrived: Set(body.car_arrived),
+        ..Default::default()
     }
-    let _message = headers
-        .get("content-type")
-        .unwrap()
-        .to_str()
-        .unwrap()
-        .to_owned();
-    Json(CarArrivedResponse {
-        time_arrived: body.time_arrived,
-        time_left: None,
-    })
+    .save(&database)
+    .await
+    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    Ok(Json(ResponseCar {
+        id: new_car.id.unwrap(),
+        car_arrived: new_car.car_arrived.unwrap(),
+        car_left: new_car.car_left.unwrap(),
+    }))
 }

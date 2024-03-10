@@ -7,8 +7,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
-    pub car_arrived: DateTime,
-    pub car_left: Option<DateTime>,
+    pub car_arrived: DateTimeWithTimeZone,
+    pub car_left: Option<DateTimeWithTimeZone>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
