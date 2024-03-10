@@ -20,7 +20,7 @@ pub async fn car_arrived(
     for (name, value) in headers.iter() {
         println!("{:?}: {:?}", name, value);
     }
-    let message = headers
+    let _message = headers
         .get("content-type")
         .unwrap()
         .to_str()
