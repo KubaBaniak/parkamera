@@ -28,6 +28,7 @@ impl MigrationTrait for Migration {
                             .timestamp_with_time_zone()
                             .null(),
                     )
+                    .col(ColumnDef::new(CarLog::SpotId).not_null().tiny_unsigned())
                     .to_owned(),
             )
             .await
@@ -44,6 +45,7 @@ impl MigrationTrait for Migration {
 enum CarLog {
     Table,
     Id,
+    SpotId,
     CarArrived,
     CarLeft,
 }
