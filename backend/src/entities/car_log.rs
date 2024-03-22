@@ -9,6 +9,7 @@ pub struct Model {
     pub id: i64,
     pub car_arrived: DateTimeWithTimeZone,
     pub car_left: Option<DateTimeWithTimeZone>,
+    pub spot_id: i16,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

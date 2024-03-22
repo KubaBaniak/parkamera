@@ -28,7 +28,7 @@ impl MigrationTrait for Migration {
                             .timestamp_with_time_zone()
                             .null(),
                     )
-                    .col(ColumnDef::new(CarLog::SpotId).not_null().tiny_unsigned())
+                    .col(ColumnDef::new(CarLog::SpotId).not_null().small_integer())
                     .to_owned(),
             )
             .await
