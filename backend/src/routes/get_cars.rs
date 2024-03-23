@@ -1,3 +1,4 @@
+use crate::constants::TIMEZONE_OFFSET_IN_S;
 use axum::{extract::Query, response::Json};
 use chrono::{FixedOffset, Utc};
 use sea_orm::prelude::DateTimeWithTimeZone;
@@ -12,7 +13,7 @@ pub struct Response {
 }
 
 pub async fn get_cars(Query(params): Query<HashMap<String, String>>) -> Json<Response> {
-    let offset = FixedOffset::east_opt(1 * 60 * 60).unwrap();
+    let offset = FixedOffset::east_opt(TIMEZONE_OFFSET_IN_S).unwrap();
     let now_with_offset = Utc::now().with_timezone(&offset);
 
     let response = match params.get("current").map(String::as_str) {

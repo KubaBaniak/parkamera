@@ -1,3 +1,4 @@
+use crate::constants::TIMEZONE_OFFSET_IN_S;
 use crate::entities::car_log;
 use crate::entities::car_log::Entity as CarLog;
 use axum::{http::StatusCode, Extension, Json};
@@ -30,7 +31,7 @@ pub async fn car_left(
         Some(car) => {
             let mut car: car_log::ActiveModel = car.into();
 
-            let offset = FixedOffset::east_opt(1 * 60 * 60).unwrap();
+            let offset = FixedOffset::east_opt(TIMEZONE_OFFSET_IN_S).unwrap();
             let now_with_offset = Utc::now().with_timezone(&offset);
             car.car_left = Set(Some(now_with_offset));
 

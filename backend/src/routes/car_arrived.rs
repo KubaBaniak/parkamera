@@ -1,4 +1,4 @@
-use crate::entities::car_log;
+use crate::{constants::TIMEZONE_OFFSET_IN_S, entities::car_log};
 use axum::{http::StatusCode, Extension, Json};
 use chrono::{FixedOffset, Utc};
 use sea_orm::{prelude::DateTimeWithTimeZone, ActiveModelTrait, DatabaseConnection, Set};
@@ -20,7 +20,7 @@ pub async fn car_arrived(
     Extension(database): Extension<DatabaseConnection>,
     Json(body): Json<RequestCar>,
 ) -> Result<Json<ResponseCar>, StatusCode> {
-    let offset = FixedOffset::east_opt(1 * 60 * 60).unwrap();
+    let offset = FixedOffset::east_opt(TIMEZONE_OFFSET_IN_S).unwrap();
     let now_with_offset = Utc::now().with_timezone(&offset);
     let new_car = car_log::ActiveModel {
         car_arrived: Set(now_with_offset),
