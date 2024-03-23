@@ -1,26 +1,30 @@
 use crate::entities::car_log;
 use axum::{http::StatusCode, Extension, Json};
+use chrono::{FixedOffset, Utc};
 use sea_orm::{prelude::DateTimeWithTimeZone, ActiveModelTrait, DatabaseConnection, Set};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct RequestCar {
-    car_arrived: DateTimeWithTimeZone,
+    spot_id: u8,
 }
 
 #[derive(Serialize)]
 pub struct ResponseCar {
     id: i64,
+    spot_id: i16,
     car_arrived: DateTimeWithTimeZone,
-    car_left: Option<DateTimeWithTimeZone>,
 }
 
 pub async fn car_arrived(
     Extension(database): Extension<DatabaseConnection>,
     Json(body): Json<RequestCar>,
 ) -> Result<Json<ResponseCar>, StatusCode> {
+    let offset = FixedOffset::east_opt(1 * 60 * 60).unwrap();
+    let now_with_offset = Utc::now().with_timezone(&offset);
     let new_car = car_log::ActiveModel {
-        car_arrived: Set(body.car_arrived),
+        car_arrived: Set(now_with_offset),
+        spot_id: Set(body.spot_id.into()),
         ..Default::default()
     }
     .save(&database)
@@ -30,6 +34,6 @@ pub async fn car_arrived(
     Ok(Json(ResponseCar {
         id: new_car.id.unwrap(),
         car_arrived: new_car.car_arrived.unwrap(),
-        car_left: new_car.car_left.unwrap(),
+        spot_id: new_car.spot_id.unwrap(),
     }))
 }
