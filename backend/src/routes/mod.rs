@@ -4,7 +4,7 @@ mod get_cars;
 
 use axum::{
     http::Method,
-    routing::{get, post},
+    routing::{get, patch, post},
     Extension, Router,
 };
 use car_arrived::car_arrived;
@@ -22,7 +22,7 @@ pub fn create_routes(database: DatabaseConnection) -> Router {
     Router::new()
         .route("/cars", get(get_cars))
         .route("/arrived", post(car_arrived))
-        .route("/left", post(car_left))
+        .route("/left", patch(car_left))
         .layer(cors)
         .layer(Extension(database))
 }
