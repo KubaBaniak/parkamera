@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 FINAL_LINE_COLOR = (255, 255, 255)
 
@@ -54,7 +54,7 @@ class PolygonDrawer(object):
         return self.polygons
 
 
-if __name__ == "__main__":
+def setup():
     img = cv2.imread("./images/images.jpg", cv2.IMREAD_COLOR)
     pd = PolygonDrawer("Polygon", img)
 
