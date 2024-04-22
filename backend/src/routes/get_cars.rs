@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct QueryParams {
-    current: String,
+    current: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -23,13 +23,14 @@ pub async fn get_cars(
     Extension(database): Extension<DatabaseConnection>,
     Query(params): Query<QueryParams>,
 ) -> Result<Json<Vec<CarResponse>>, StatusCode> {
-    let models = if params.current == "true" {
-        CarLogEntity::find()
-            .filter(car_log::Column::CarLeft.is_null())
-            .all(&database)
-            .await
-    } else {
-        CarLogEntity::find().all(&database).await
+    let models = match params.current.as_deref() {
+        Some("true") => {
+            CarLogEntity::find()
+                .filter(car_log::Column::CarLeft.is_null())
+                .all(&database)
+                .await
+        }
+        _ => CarLogEntity::find().all(&database).await,
     };
 
     match models {
