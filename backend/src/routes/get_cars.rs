@@ -1,48 +1,50 @@
-use crate::constants::TIMEZONE_OFFSET_IN_S;
 use crate::entities::car_log;
-use crate::entities::car_log::Entity as CarLog;
+use crate::entities::car_log::Entity as CarLogEntity;
 use axum::{extract::Query, http::StatusCode, response::Json, Extension};
-use chrono::{FixedOffset, Utc};
-use sea_orm::{prelude::DateTimeWithTimeZone, DatabaseConnection};
+use sea_orm::prelude::DateTimeWithTimeZone;
+use sea_orm::DatabaseConnection;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
-use serde::Serialize;
-use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize)]
+pub struct QueryParams {
+    current: String,
+}
 
 #[derive(Serialize)]
-pub struct Response {
+pub struct CarResponse {
     id: i64,
-    spot_id: i16,
     car_arrived: DateTimeWithTimeZone,
     car_left: Option<DateTimeWithTimeZone>,
+    spot_id: i16,
 }
 
 pub async fn get_cars(
     Extension(database): Extension<DatabaseConnection>,
-    Query(params): Query<HashMap<String, String>>,
-) -> Result<Json<Vec<CarLog>>, StatusCode> {
-    let offset = FixedOffset::east_opt(TIMEZONE_OFFSET_IN_S).unwrap();
-    let now_with_offset = Utc::now().with_timezone(&offset);
-
-    let current_cars = CarLog::find()
-        .filter(car_log::Column::CarLeft.is_not_null())
-        .all(&database)
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-    current_cars[0].id
-    let response = match params.get("current").map(String::as_str) {
-        Some("true") => CarLog::find()
-            .filter(car_log::Column::CarLeft.is_not_null())
+    Query(params): Query<QueryParams>,
+) -> Result<Json<Vec<CarResponse>>, StatusCode> {
+    let models = if params.current == "true" {
+        CarLogEntity::find()
+            .filter(car_log::Column::CarLeft.is_null())
             .all(&database)
             .await
-            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?,
-        _ => CarLog::find()
-            .all(&database)
-            .await
-            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?,
+    } else {
+        CarLogEntity::find().all(&database).await
     };
 
-
-
-    Ok(Json(response))
+    match models {
+        Ok(cars) => {
+            let response: Vec<CarResponse> = cars
+                .into_iter()
+                .map(|car| CarResponse {
+                    id: car.id,
+                    car_arrived: car.car_arrived,
+                    car_left: car.car_left,
+                    spot_id: car.spot_id,
+                })
+                .collect();
+            Ok(Json(response))
+        }
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
 }
