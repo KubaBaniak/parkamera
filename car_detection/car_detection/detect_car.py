@@ -14,10 +14,10 @@ def is_car_on_image(image_filename: str) -> bool:
     Check if car is in the given image
     
     Args:
-    - image_filename (str): filename to the cropped image of given slot
+    image_filename (str): filename to the cropped image of given slot
     
     Returns:
-    - Boolean: True - car detected | False - car not detected
+    Boolean: True - car detected | False - car not detected
     """
 
     img = cv2.imread(image_filename)
@@ -32,7 +32,7 @@ def check_slots() -> list[int]:
     Checks all slots whether there are cars.
     
     Returns:
-    - List (int): list of slot id's where car was detected.
+    List (int): list of slot id's where car was detected.
     """
 
     dir_path = './images/slots'

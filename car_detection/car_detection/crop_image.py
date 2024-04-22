@@ -9,11 +9,11 @@ def get_polygons_from_file(filename: str) -> list:
     Ex. [ [[x1, y1], [x2, y2], [x3, y3], [x4, y4]], ...]
     
     Args:
-    - filename (string): filename of the coordinates text file in the root 
+    filename (string): filename of the coordinates text file in the root 
     directory
     
     Returns:
-    - list of list of list of 2 ints
+    list of list of list of 2 ints
     """
 
     polygons = []
@@ -31,12 +31,12 @@ def crop_image(slot_id: int, polygon: list, camera_img: list) -> None:
     Crops an image to the size of slot with id: 'slot_id'
     
     Args:
-    - slot_id (int) 
-    - polygon (list of list of list of 2 ints)
-    - camera_img (cv2 image)
+    slot_id (int) 
+    polygon (list of list of list of 2 ints)
+    camera_img (cv2 image)
     
     Returns:
-    - Nothing: it saves the cropped image to the images/slots/slot_<slot_id>.png file
+    Nothing: it saves the cropped image to the images/slots/slot_<slot_id>.png file
     """
     pts = np.array(polygon)
     rect = cv2.boundingRect(pts)
@@ -54,11 +54,11 @@ def crop_all_slots(base_image_filename: str, polygons: list):
     Crops all the slots on the image
     
     Args:
-    - base_image_filename (str): filename of the image from camera.
-    - polygon (list of list of list of 2 ints)
+    base_image_filename (str): filename of the image from camera.
+    polygon (list of list of list of 2 ints)
     
     Returns:
-    - None (look crop_image function)
+    None (look crop_image function)
     """
     img = cv2.imread(base_image_filename)
     for (i, polygon) in enumerate(polygons):
