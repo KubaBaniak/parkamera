@@ -10,6 +10,16 @@ NAMES = MODEL.names
 
 
 def is_car_on_image(image_filename: str) -> bool:
+    """
+    Check if car is in the given image
+    
+    Args:
+    - image_filename (str): filename to the cropped image of given slot
+    
+    Returns:
+    - Boolean: True - car detected | False - car not detected
+    """
+
     img = cv2.imread(image_filename)
     results = MODEL(img, classes=2)
     for r in results:
@@ -18,6 +28,13 @@ def is_car_on_image(image_filename: str) -> bool:
 
 
 def check_slots() -> list[int]:
+    """
+    Checks all slots whether there are cars.
+    
+    Returns:
+    - List (int): list of slot id's where car was detected.
+    """
+
     dir_path = './images/slots'
     taken_slots = []
     files = os.listdir(dir_path)
