@@ -27,21 +27,21 @@ def is_car_on_image(image_filename: str) -> bool:
             return 'car' == NAMES[int(c)]
 
 
-def check_slots() -> list[int]:
+def check_spots() -> list[int]:
     """
-    Checks all slots whether there are cars.
+    Checks all spots whether there are cars.
     
     Returns:
     List (int): list of slot id's where car was detected.
     """
 
-    dir_path = './images/slots'
-    taken_slots = []
+    dir_path = './images/spots'
+    taken_spots = []
     files = os.listdir(dir_path)
     for file in files:
         file_path = os.path.join(dir_path, file)
         if is_car_on_image(file_path):
             match = re.search(r'\d+', file)
-            number = match.group() if match else Exception('Wrong slots name')
-            taken_slots.append(number)
-    return taken_slots
+            number = match.group() if match else Exception('Wrong spots name')
+            taken_spots.append(int(number))
+    return taken_spots

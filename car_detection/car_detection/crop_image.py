@@ -36,7 +36,7 @@ def crop_image(slot_id: int, polygon: list, camera_img: list) -> None:
     camera_img (cv2 image)
     
     Returns:
-    Nothing: it saves the cropped image to the images/slots/slot_<slot_id>.png file
+    Nothing: it saves the cropped image to the images/spots/slot_<slot_id>.png file
     """
     pts = np.array(polygon)
     rect = cv2.boundingRect(pts)
@@ -46,12 +46,12 @@ def crop_image(slot_id: int, polygon: list, camera_img: list) -> None:
     mask = np.zeros(cropped.shape[:2], np.uint8)
     cv2.drawContours(mask, [pts], -1, (255, 255, 255), -1, cv2.LINE_AA)
     dst = cv2.bitwise_and(cropped, cropped, mask=mask)
-    cv2.imwrite(f'images/slots/slot_{slot_id}.png', dst)
+    cv2.imwrite(f'images/spots/slot_{slot_id}.png', dst)
 
 
-def crop_all_slots(base_image_filename: str, polygons: list):
+def crop_all_spots(base_image_filename: str, polygons: list):
     """
-    Crops all the slots on the image
+    Crops all the spots on the image
     
     Args:
     base_image_filename (str): filename of the image from camera.

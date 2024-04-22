@@ -1,7 +1,27 @@
-import json
 import requests
+import json
 
-occupied_spots = [0, 3]
+def update_slot_status(occupied_spots):
+    try:
+        response = requests.get('http://localhost:3000/cars?current=true')
+        response.raise_for_status()
+        json_string = response.content.decode('utf-8')
+        current_cars = json.loads(json_string)
+        
+        if current_cars:
+            remove_departed_cars(current_cars, occupied_spots)
+        else:
+            print("No cars to process for departure.")
+            
+        if occupied_spots:
+            update_arrived_cars(current_cars, occupied_spots)
+        else:
+            print("No new cars to notify as arrived.")
+            
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to fetch current cars data. Error: {e}")
+    except json.JSONDecodeError:
+        print("Failed to decode the response from the server. It might be empty or malformed.")
 
 def remove_departed_cars(current_cars, occupied_spots):
     """
@@ -35,23 +55,3 @@ def update_arrived_cars(current_cars, occupied_spots):
             req = requests.post('http://localhost:3000/arrived', json=body)
             print(f"Car arrived at spot {spot_id}. Status code: {req.status_code}")
 
-try:
-    response = requests.get('http://localhost:3000/cars?current=true')
-    response.raise_for_status()
-    json_string = response.content.decode('utf-8')
-    current_cars = json.loads(json_string)
-    
-    if current_cars:
-        remove_departed_cars(current_cars, occupied_spots)
-    else:
-        print("No cars to process for departure.")
-        
-    if occupied_spots:
-        update_arrived_cars(current_cars, occupied_spots)
-    else:
-        print("No new cars to notify as arrived.")
-        
-except requests.exceptions.RequestException as e:
-    print(f"Failed to fetch current cars data. Error: {e}")
-except json.JSONDecodeError:
-    print("Failed to decode the response from the server. It might be empty or malformed.")

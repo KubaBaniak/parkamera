@@ -3,7 +3,6 @@ import numpy as np
 
 FINAL_LINE_COLOR = (255, 255, 255)
 
-
 class PolygonDrawer(object):
     def __init__(self, window_name, img):
         self.window_name = window_name
@@ -41,13 +40,13 @@ class PolygonDrawer(object):
             if (len(self.polygons) > 0):
                 for polygon in self.polygons:
                     pts = np.array(polygon, np.int32).reshape((-1, 1, 2))
-                    cv2.polylines(img, [pts], True, FINAL_LINE_COLOR, 1)
+                    cv2.polylines(self.img, [pts], True, FINAL_LINE_COLOR, 1)
 
-            cv2.imshow(self.window_name, img)
+            cv2.imshow(self.window_name, self.img)
             if cv2.waitKey(50) == 27:
                 self.done = True
 
-        cv2.imshow(self.window_name, img)
+        cv2.imshow(self.window_name, self.img)
         cv2.waitKey()
 
         cv2.destroyWindow(self.window_name)
@@ -55,11 +54,11 @@ class PolygonDrawer(object):
 
 
 def setup():
-    img = cv2.imread("./images/images.jpg", cv2.IMREAD_COLOR)
+    img = cv2.imread("./images/image.jpg", cv2.IMREAD_COLOR)
     pd = PolygonDrawer("Polygon", img)
 
     coordinates = pd.run()
-    with open('parking_slots_coordinates.txt', 'w') as file:
+    with open('parking_spots_coordinates.txt', 'w') as file:
         for polygon in coordinates:
             for points in polygon:
                 file.write(" ".join(str(point) for point in points))
@@ -68,3 +67,7 @@ def setup():
         file.close()
 
     print("Polygon = %s" % pd.polygons)
+
+
+if __name__ == "__main__":
+    setup()
