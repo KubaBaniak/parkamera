@@ -25,7 +25,7 @@ pub async fn car_left(
         .filter(car_log::Column::SpotId.eq(body.spot_id as i16))
         .one(&database)
         .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+        .map_err(|_| StatusCode::NOT_FOUND)?;
 
     match car {
         Some(car) => {

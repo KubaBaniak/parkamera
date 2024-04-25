@@ -46,6 +46,6 @@ pub async fn get_cars(
                 .collect();
             Ok(Json(response))
         }
-        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+        Err(_) => Err(StatusCode::NO_CONTENT),
     }
 }
