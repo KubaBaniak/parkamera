@@ -1,4 +1,4 @@
-import Logo from "./components/logo/Logo"
+import Navbar from "./components/navbar/navbar"
 import SlotsInfoList from "./components/slots-info/slots-info"
 import Stack from '@mui/material/Stack';
 import { Container, ThemeProvider, Typography } from "@mui/material";
@@ -11,7 +11,7 @@ theme = responsiveFontSizes(theme);
 function App() {
   return (
     <>
-      <Logo />
+      <Navbar />
       <Stack
         sx={{ m: 4 }}
         direction="row"
