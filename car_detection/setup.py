@@ -54,7 +54,7 @@ class PolygonDrawer(object):
 
 
 def setup():
-    img = cv2.imread("./images/image.jpg", cv2.IMREAD_COLOR)
+    img = cv2.imread("./images/base_img.jpg", cv2.IMREAD_COLOR)
     pd = PolygonDrawer("Polygon", img)
 
     coordinates = pd.run()

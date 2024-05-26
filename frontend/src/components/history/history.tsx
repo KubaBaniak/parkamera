@@ -45,7 +45,7 @@ export default function History() {
   return (
     < Timeline position="alternate" >
       {sortCarsByLastAction(carData).map((car, index) => (
-        <TimelineItem>
+        <TimelineItem key={car.id}>
           <TimelineOppositeContent color="text.secondary">
             {car.car_left ? new Date(car.car_left).toLocaleString() : new Date(car.car_arrived).toLocaleString()}
           </TimelineOppositeContent>
