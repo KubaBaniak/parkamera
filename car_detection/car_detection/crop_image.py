@@ -46,7 +46,7 @@ def crop_image(slot_id: int, polygon: list, camera_img: list) -> None:
     mask = np.zeros(cropped.shape[:2], np.uint8)
     cv2.drawContours(mask, [pts], -1, (255, 255, 255), -1, cv2.LINE_AA)
     dst = cv2.bitwise_and(cropped, cropped, mask=mask)
-    cv2.imwrite(f'images/spots/slot_{slot_id}.png', dst)
+    cv2.imwrite(f'../images/spots/slot_{slot_id}.png', dst)
 
 
 def crop_all_spots(base_image_filename: str, polygons: list):
