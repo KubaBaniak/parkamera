@@ -57,7 +57,7 @@ def setup():
     img = cv2.imread("./images/base_img.jpg", cv2.IMREAD_COLOR)
     pd = PolygonDrawer("Polygon", img)
 
-    coordinates = pd.run('Pick your spots', img)
+    coordinates = pd.run()
     with open('parking_spots_coordinates.txt', 'w') as file:
         for polygon in coordinates:
             for points in polygon:
