@@ -54,11 +54,15 @@ class PolygonDrawer(object):
 
 
 def setup():
-    img = cv2.imread("./images/base_img.jpg", cv2.IMREAD_COLOR)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    path_to_base_image = os.path.join(setup_dir, 'images/base_img.jpg')
+    img = cv2.imread(path_to_base_image, cv2.IMREAD_COLOR)
     pd = PolygonDrawer("Polygon", img)
 
     coordinates = pd.run()
-    with open('parking_spots_coordinates.txt', 'w') as file:
+
+    path_to_coordinates = os.path.join(setup_dir, 'parking_spots_coordinates.txt')
+    with open(path_to_coordinates, 'w') as file:
         for polygon in coordinates:
             for points in polygon:
                 file.write(" ".join(str(point) for point in points))
