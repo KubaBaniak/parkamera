@@ -7,8 +7,8 @@ from car_detection.detect_car import check_spots
 from parking_manager.compare_spots import update_slot_status
 
 if __name__ == "__main__":
-    spots_coords_file_path = './parking_spots_coordinates.txt'
-    list_of_images = glob('./images/image_history/*')
+    spots_coords_file_path = '../parking_spots_coordinates.txt'
+    list_of_images = glob('../images/image_history/*')
     latest_image = max(list_of_images, key=os.path.getctime)
 
     if not os.path.isfile(spots_coords_file_path):
