@@ -35,11 +35,12 @@ def check_spots() -> list[int]:
     List (int): list of slot id's where car was detected.
     """
 
-    dir_path = './images/spots'
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    spots_dir = os.path.join(current_dir, '../images/spots')
     taken_spots = []
-    files = os.listdir(dir_path)
+    files = os.listdir(spots_dir)
     for file in files:
-        file_path = os.path.join(dir_path, file)
+        file_path = os.path.join(spots_dir, file)
         if is_car_on_image(file_path):
             match = re.search(r'\d+', file)
             number = match.group() if match else Exception('Wrong spots name')
