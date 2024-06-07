@@ -1,5 +1,7 @@
 import os.path
 
+from glob import glob
+
 from car_detection.crop_image import crop_all_spots, get_polygons_from_file
 from car_detection.detect_car import check_spots
 from parking_manager.compare_spots import update_slot_status
