@@ -58,7 +58,7 @@ def setup():
     pd = PolygonDrawer("Polygon", img)
 
     coordinates = pd.run()
-    with open('../parking_spots_coordinates.txt', 'w') as file:
+    with open('parking_spots_coordinates.txt', 'w') as file:
         for polygon in coordinates:
             for points in polygon:
                 file.write(" ".join(str(point) for point in points))
