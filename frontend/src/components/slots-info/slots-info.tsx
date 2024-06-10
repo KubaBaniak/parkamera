@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ICar } from '../../types/car.dto';
 
 const fetchCurrentCarData = async (): Promise<ICar[]> => {
-  const data = fetch('http://localhost:3000/cars?current=true').then((res) =>
+  const data = fetch(`http://${import.meta.env.VITE_BackendAddress}/cars?current=true`).then((res) =>
     res.json(),
   )
   return data
